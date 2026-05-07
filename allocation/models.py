@@ -21,6 +21,7 @@ class Room(models.Model):
     capacity = models.PositiveIntegerField()
     occupied = models.IntegerField(default=0)
     block = models.CharField(max_length=10)
+    gender_type=models.CharField(max_length=10, choices=GENDER)
     
     def current_occupancy(self):
         return self.allocation_set.filter(status='Allocated').count()

@@ -6,22 +6,25 @@ class Student(models.Model):
     age = models.IntegerField()
     gender=models.CharField(max_length=10, choices=GENDER)
     email = models.EmailField(unique=True)
-    rollno = models.IntegerField(unique=True)
+    roll_number = models.IntegerField(unique=True)
     course = models.CharField(max_length=100)
     year = models.IntegerField()
-    contact_number = models.CharField(max_length=15)
+    contact = models.CharField(max_length=15)
     photo = models.ImageField(upload_to='student_photos/', null=True, blank=True)
 
     def __str__(self):
         return f"{self.rollno} - {self.name}"
 
 class Room(models.Model):
-    GENDER= [("MALE","MALE"),("FEMALE","FEMALE")]
+    ROOM_TYPE_CHOICES = [('Single', 'Single'), ('Double', 'Double'), ('Triple', 'Triple')]
+    GENDER_CHOICES = [('Male', 'Male'), ('Female', 'Female')]
+
     room_number = models.CharField(max_length=10, unique=True)
-    capacity = models.PositiveIntegerField()
-    occupied = models.IntegerField(default=0)
     block = models.CharField(max_length=10)
-    gender_type=models.CharField(max_length=10, choices=GENDER)
+    floor = models.PositiveIntegerField()
+    room_type = models.CharField(max_length=10, choices=ROOM_TYPE_CHOICES)
+    gender_type = models.CharField(max_length=10, choices=GENDER_CHOICES)
+    capacity = models.PositiveIntegerField()
     
     def current_occupancy(self):
         return self.allocation_set.filter(status='Allocated').count()
@@ -37,14 +40,17 @@ class Allocation(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     status = models.CharField(max_length=10, choices=STATUS, default="ALLOCATED")
-    allocated_on = models.DateTimeField(auto_now_add=True)
+    allocated_date = models.DateTimeField(auto_now_add=True)
     vacated_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.rollno}-{self.student.name} allocated to {self.room.room_number}"
 class WaitlistEntry(models.Model):
     
+    ROOM_TYPE_CHOICES = [('Single', 'Single'), ('Double', 'Double'), ('Triple', 'Triple')]
+
     student = models.OneToOneField(Student, on_delete=models.CASCADE)
+    preferred_room_type = models.CharField(max_length=10, choices=ROOM_TYPE_CHOICES)
     requested_date = models.DateField(auto_now_add=True)
     priority = models.PositiveIntegerField(default=0)
 

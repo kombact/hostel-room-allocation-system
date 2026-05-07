@@ -1,0 +1,49 @@
+{% extends 'allocation/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold mb-0">Waitlist</h4>
+    <a href="{% url 'waitlist_add' %}" class="btn btn-dark">+ Add to Waitlist</a>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Priority</th>
+                    <th>Student</th>
+                    <th>Gender</th>
+                    <th>Preferred Room Type</th>
+                    <th>Requested Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in entries %}
+                <tr>
+                    <td>{{ entry.priority }}</td>
+                    <td>{{ entry.student.name }}</td>
+                    <td>{{ entry.student.gender }}</td>
+                    <td>{{ entry.preferred_room_type }}</td>
+                    <td>{{ entry.requested_date }}</td>
+                    <td>
+                        <a href="{% url 'waitlist_remove' entry.pk %}" class="btn btn-sm btn-outline-danger">Remove</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-3">No students on waitlist.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

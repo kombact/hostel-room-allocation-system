@@ -1,0 +1,61 @@
+{% extends 'allocation/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold mb-0">Allocations</h4>
+    <a href="{% url 'allocate_room' %}" class="btn btn-dark">+ Allocate Room</a>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Student</th>
+                    <th>Roll No</th>
+                    <th>Room</th>
+                    <th>Block</th>
+                    <th>Allocated Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for alloc in allocations %}
+                <tr>
+                    <td>{{ alloc.student.name }}</td>
+                    <td>{{ alloc.student.roll_number }}</td>
+                    <td>{{ alloc.room.room_number }}</td>
+                    <td>{{ alloc.room.block }}</td>
+                    <td>{{ alloc.allocated_date }}</td>
+                    <td>
+                        {% if alloc.status == 'Active' %}
+                            <span class="badge bg-success">Active</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Vacated</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if alloc.status == 'Active' %}
+                            <a href="{% url 'vacate_room' alloc.pk %}" class="btn btn-sm btn-outline-danger">Vacate</a>
+                        {% else %}
+                            <span class="text-muted small">—</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-3">No allocations yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

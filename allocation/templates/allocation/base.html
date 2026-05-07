@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+
+{% if user.is_authenticated %}
+<!-- Navbar -->
+<nav class="navbar navbar-dark bg-dark px-3">
+    <span class="navbar-brand fw-bold">🏠 Hostel Management</span>
+    <div class="d-flex align-items-center gap-3">
+        <span class="text-white">{{ user.username }}</span>
+        <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">Logout</a>
+    </div>
+</nav>
+
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div class="bg-dark text-white p-3" style="min-height:100vh; width:220px;">
+        <ul class="nav flex-column gap-2 mt-3">
+            <li class="nav-item">
+                <a href="{% url 'dashboard' %}" class="nav-link text-white">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-white">
+                    <i class="bi bi-people"></i> Students
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-white">
+                    <i class="bi bi-door-open"></i> Rooms
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-white">
+                    <i class="bi bi-person-check"></i> Allocations
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-white">
+                    <i class="bi bi-clock-history"></i> Waitlist
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-white">
+                    <i class="bi bi-bar-chart"></i> Reports
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-grow-1 p-4">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+
+{% else %}
+    <div class="container mt-4">
+        Please login
+    </div>
+{% endif %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
